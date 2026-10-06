@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/*
+  Al ResCate tokens. Colors come straight from the logo:
+  turquesa (perro), amarillo (gato), verde bosque (fondo del logo).
+  Radius rule: photocards 6px, inputs/panels 14px, buttons + chips pill.
+*/
+@theme {
+  --color-forest-950: oklch(0.24 0.042 166);
+  --color-forest-900: oklch(0.29 0.048 164);
+  --color-forest-800: oklch(0.36 0.058 162);
+  --color-forest-700: oklch(0.45 0.065 160);
+  --color-turq: oklch(0.72 0.12 212);
+  --color-turq-deep: oklch(0.52 0.1 214);
+  --color-sun: oklch(0.91 0.18 106);
+  --color-sun-deep: oklch(0.62 0.13 95);
+  --color-mint: oklch(0.83 0.11 162);
+  --color-paper: oklch(0.975 0.006 170);
+  --color-paper-2: oklch(0.93 0.012 170);
+  --color-ink: oklch(0.23 0.03 166);
+  --color-ink-soft: oklch(0.42 0.03 166);
+  --color-leaf: oklch(0.95 0.012 166);
+  --color-leaf-soft: oklch(0.84 0.03 166);
+
+  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-hand: "Kalam", "Comic Sans MS", cursive;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-forest-950 text-leaf font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3 { @apply font-display; text-wrap: balance; letter-spacing: -0.015em; }
+  p { text-wrap: pretty; }
+  :focus-visible { outline: 3px solid var(--color-sun); outline-offset: 3px; border-radius: 6px; }
+  ::selection { background: var(--color-sun); color: var(--color-ink); }
+}
+
+@layer components {
+  /* Polaroid-style frame. --tilt is set per card. */
+  .photocard {
+    --tilt: 0deg;
+    @apply relative block bg-paper text-ink rounded-[6px] p-2.5 pb-3;
+    transform: rotate(var(--tilt));
+    box-shadow:
+      0 1px 0 oklch(1 0 0 / 0.6) inset,
+      0 2px 4px oklch(0.15 0.04 166 / 0.25),
+      0 18px 40px -12px oklch(0.12 0.04 166 / 0.55);
+  }
+  .photocard-img { @apply block w-full rounded-[3px] object-cover bg-paper-2; }
+  .photocard-caption { @apply font-hand text-ink leading-tight; }
+
+  /* Strip of washi tape holding a card */
+  .tape {
+    @apply absolute left-1/2 -top-3 h-6 w-20 -translate-x-1/2 rotate-[-4deg] rounded-[2px];
+    background: color-mix(in oklch, var(--color-sun) 70%, transparent);
+    box-shadow: 0 1px 2px oklch(0 0 0 / 0.15);
+  }
+  .tape-turq { background: color-mix(in oklch, var(--color-turq) 70%, transparent); }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-display text-lg font-semibold whitespace-nowrap select-none;
+    transition: transform 160ms var(--ease-out), background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-sun { @apply bg-sun text-ink; box-shadow: 0 6px 0 var(--color-sun-deep); }
+  .btn-sun:active { box-shadow: 0 2px 0 var(--color-sun-deep); transform: translateY(4px) scale(0.98); }
+  .btn-ghost { @apply text-leaf ring-2 ring-leaf/30; }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-sun:hover { @apply bg-[oklch(0.94_0.17_106)]; }
+    .btn-ghost:hover { @apply ring-turq text-turq; }
+  }
+
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold; }
+
+  /* Admin surfaces */
+  .field { @apply grid gap-1.5; }
+  .field > span { @apply text-sm font-semibold text-ink; }
+  .input {
+    @apply w-full rounded-[14px] border border-ink/20 bg-white px-3.5 py-2.5 text-ink placeholder:text-ink-soft;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .input:focus { @apply border-turq-deep outline-none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-turq) 35%, transparent); }
+}
+
+/* Stage colors shared by chips and timeline dots */
+.stage-rescate { --stage: var(--color-sun); }
+.stage-tratamiento { --stage: var(--color-turq); }
+.stage-recuperacion { --stage: var(--color-mint); }
+.stage-adopcion { --stage: oklch(0.82 0.12 20); }
+.stage-actualizacion { --stage: var(--color-leaf-soft); }
+.stage-memoria { --stage: oklch(0.78 0.04 280); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}
