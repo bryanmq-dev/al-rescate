@@ -5,7 +5,7 @@ WORKDIR /app
 RUN corepack enable
 
 # .npmrc is optional (glob), pnpm-lock.yaml is required for --frozen-lockfile
-COPY package.json pnpm-lock.yaml .npmrc* ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc* ./
 RUN pnpm install --frozen-lockfile
 
 COPY . ./
