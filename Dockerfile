@@ -11,6 +11,9 @@ RUN pnpm install --frozen-lockfile
 COPY . ./
 RUN pnpm run build
 
+# Nitro doesn't trace libsql's platform binding (loaded via dynamic require); copy the one pnpm installed
+RUN cp -rL node_modules/.pnpm/@libsql+linux-*@*/node_modules/@libsql/linux-* .output/server/node_modules/@libsql/
+
 FROM node:22-alpine
 WORKDIR /app
 
